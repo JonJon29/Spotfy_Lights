@@ -39,5 +39,8 @@ def getCurrentTrack(token):
 		'Authorization' : 'Bearer ' + str(token)
 		}
 	res = requests.get(url, headers=headers)
-	song = json.loads(res.text)
+	if(res.text):
+		song = json.loads(res.text)
+	else: 
+		song = {}
 	return song
