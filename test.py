@@ -1,5 +1,5 @@
 import requests
+import ledControll
 
-x = requests.get('https://w3schools.com/python/demopage.htm')
-
-print(x.text)
+ledControll.switch(1)
+ledControll.changeColor(1, 255, 0, 100)

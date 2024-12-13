@@ -21,32 +21,26 @@ try:
 	while True:
 		while currentSong == oldSong:
 			song = spotify.getCurrentTrack(token)
+			while(song == {}):
+				song = spotify.getCurrentTrack(token)
+				sleep(1)
 			currentSong = str(song['item']['id'])
 			sleep(1)
 		print()
 		oldSong = currentSong 
 
 		coverUrl = song['item']['album']['images'][1]['url']
-		palette = analyzer.getColor(coverUrl)
+		palette = analyzer.extract_dominant_colors(coverUrl, 10, 60, 100)
 
-		r = palette[0][0] 
-		g = palette[0][1] 
-		b = palette[0][2]
-		ledControll.changeColor(0, int(r * brightness), int(g * brightness), int(b * brightness));
-		print('\033[38;2;' + str(r) + ';' + str(g) + ';' + str(b) + 'mColor!\033[0m')
+		segment = 0;
+		for p in palette:
+			r = int(p[0]) 
+			g = int(p[1]) 
+			b = int(p[2])
+			ledControll.changeColor(segment, int(r * brightness), int(g * brightness), int(b * brightness));
+			segment += 1
+			print('\033[38;2;' + str(r) + ';' + str(g) + ';' + str(b) + 'mColor!\033[0m')
+			if(segment >= 3): break;
 
-		r = palette[1][0] 
-		g = palette[1][1]
-		b = palette[1][2]
-		ledControll.changeColor(1, int(r * brightness), int(g * brightness), int(b * brightness));
-
-		print('\033[38;2;' + str(r) + ';' + str(g) + ';' + str(b) + 'mColor!\033[0m') 
-
-		r = palette[2][0] 
-		g = palette[2][1]
-		b = palette[2][2]
-		ledControll.changeColor(2, int(r * brightness), int(g * brightness), int(b * brightness));
-
-		print('\033[38;2;' + str(r) + ';' + str(g) + ';' + str(b) + 'mColor!\033[0m')
 except KeyboardInterrupt: 
 	print("End")
