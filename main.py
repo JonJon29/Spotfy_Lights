@@ -1,17 +1,17 @@
-import spotify 
+from spotify import Spotify 
 import analyzer 
 from time import sleep 
-import ledControll
+import wled
 import home
 
-client_id = '4e7c4e2792ef4fc0963d4418ead81671' 
-client_secret = '92547db376f84c0b986ecfdc3812efd7' 
-redirect_uri = 'https://google.com/' 
+clientId = '4e7c4e2792ef4fc0963d4418ead81671' 
+clientSecret = '92547db376f84c0b986ecfdc3812efd7' 
+redirectUri = 'https://google.com/' 
 
-refresh_token = 'AQC0zl0IfQ4aNWzvym6OUkHGxHjhIpYG2gCjeNtcsgATegYUROREBqNcbVIViKBUBLiTSCho9F99sQzgdGBXrytVUYkS9nVcgOOj2XZkjQ0N8TENLJfddK67GR-S54BaSHg'
+refreshToken = 'AQC0zl0IfQ4aNWzvym6OUkHGxHjhIpYG2gCjeNtcsgATegYUROREBqNcbVIViKBUBLiTSCho9F99sQzgdGBXrytVUYkS9nVcgOOj2XZkjQ0N8TENLJfddK67GR-S54BaSHg'
 code = 'AQBaVBnNJE5WkWPKj06o0vbCCBmd-73z2adcYLvY0uZgvdnJJ4av6BojPq2fIa7oiQOqkvxFXiLGcp-eDBzrZlTMjUgthbBbgptCLOf8NXoV_9hESPsARdGY7VSUtowKcLKnp67hzgcidsJQKZ2Em__PpHmaAGo' 
 
-token = spotify.getToken(client_id, client_secret, refresh_token)
+s = Spotify(refreshToken, clientId, clientSecret)
 
 brightness = 1
 
@@ -23,9 +23,9 @@ try:
 		while currentSong == oldSong:
 			while(home.checkSpotify() == 0):
 				sleep(1)
-			song = spotify.getCurrentTrack(token)
-			while(song == {}):
-				song = spotify.getCurrentTrack(token)
+			song = s.getCurrentTrack()
+			while(song == -1):
+				song = s.getCurrentTrack()
 				sleep(1)
 			currentSong = str(song['item']['id'])
 			sleep(1)

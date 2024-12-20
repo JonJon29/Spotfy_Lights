@@ -15,14 +15,6 @@ def is_grayscale(image):
     diff = np.abs(image[:, :, 0] - image[:, :, 1]) + np.abs(image[:, :, 1] - image[:, :, 2])
     return np.mean(diff) < 10  # Toleranzschwelle für Unterschiede
 
-def filter_black_white(colors, threshold_black=80, threshold_white=215):
-    filtered_colors = []
-    for color in colors:
-        brightness = np.mean(color)
-        if brightness > threshold_black and brightness < threshold_white:
-            filtered_colors.append(color)
-            if(len(filtered_colors) >= 3): return filtered_colors
-    return filtered_colors
 
 def filter_saturation(colors, min_saturation=60, min_brightness=50):
     filtered_colors = []

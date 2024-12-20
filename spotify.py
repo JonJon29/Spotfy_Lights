@@ -3,49 +3,63 @@ import base
 import json
 from datetime import datetime, timezone
 
-def getTime(): 
-	return int(datetime.now(timezone.utc).timestamp())
+class Spotify:
+	def __init__(self, refreshToken, clientId, clientSecret):
+		self.refreshToken = refreshToken 
+		self.clientId = clientId 
+		self.clientSecret = clientSecret
+		self.expireTime = 0 
+		self.token = 0
 
-def authorize(client_id, client_secret, redirect_uri, code):
-	url ='https://accounts.spotify.com/api/token'
-	form = {
-		'code': code, 
-		'redirect_uri': redirect_uri, 
-		'grant_type': 'authorization_code'
+	def getTime(self): 
+		return int(datetime.now(timezone.utc).timestamp())
+	
+	def getToken(self):
+		url = 'https://accounts.spotify.com/api/token'
+		body = {
+			'grant_type' : 'refresh_token',
+			'refresh_token' : self.refreshToken,
 		}
-	headers = {
-		'content-type': 'application/x-www-form-urlencoded', 
-		'Authorization': "Basic " + base.encode(client_id, client_secret).decode('utf-8') 
-		}
-	print(headers)	
-	x = requests.post(url, data = form, headers = headers)
+		headers = {
+			'Authorization': "Basic " + base.encode(self.clientId, self.clientSecret).decode('utf-8') ,
+			'Content-Type': 'application/x-www-form-urlencoded'}
+		res = requests.post(url, data=body, headers=headers)
+		dict = json.loads(res.text)
 
-	dict = json.loads(x.txt)
+		return dict['access_token']
+	
+	def checkToken(self):
+		now = self.getTime()
+		if(now >= self.expireTime):
+			self.token = self.getToken() 
+			self.expireTime = now 
 
-	return dict['refresh_token']
+	def authorize(self, redirect_uri, code):
+		url ='https://accounts.spotify.com/api/token'
+		form = {
+			'code': code, 
+			'redirect_uri': redirect_uri, 
+			'grant_type': 'authorization_code'
+			}
+		headers = {
+			'content-type': 'application/x-www-form-urlencoded', 
+			'Authorization': "Basic " + base.encode(self.clientId, self.clientSecret).decode('utf-8') 
+			}
+		x = requests.post(url, data = form, headers = headers)
 
-def getToken(client_id, client_secret, refresh_token):
-	url = 'https://accounts.spotify.com/api/token'
-	body = {
-		'grant_type' : 'refresh_token',
-		'refresh_token' : refresh_token,
-	}
-	headers = {
-		'Authorization': "Basic " + base.encode(client_id, client_secret).decode('utf-8') ,
-		'Content-Type': 'application/x-www-form-urlencoded'}
-	res = requests.post(url, data=body, headers=headers)
-	dict = json.loads(res.text)
+		dict = json.loads(x.txt)
 
-	return dict['access_token']
+		return dict['refresh_token']
 
-def getCurrentTrack(token):
-	url = 'https://api.spotify.com/v1/me/player/currently-playing'
-	headers = {
-		'Authorization' : 'Bearer ' + str(token)
-		}
-	res = requests.get(url, headers=headers)
-	if(res.text):
-		song = json.loads(res.text)
-	else: 
-		song = -1
-	return song
+	def getCurrentTrack(self):
+		self.checkToken()
+		url = 'https://api.spotify.com/v1/me/player/currently-playing'
+		headers = {
+			'Authorization' : 'Bearer ' + str(self.token)
+			}
+		res = requests.get(url, headers=headers)
+		if(res.text):
+			song = json.loads(res.text)
+		else: 
+			song = -1
+		return song
