@@ -1,7 +1,13 @@
 import requests 
-import base
 import json
 from datetime import datetime, timezone
+import base64 
+
+def encode(client_id, client_secret):
+	client_string = str(client_id) + ":" + str(client_secret)
+	client_bytes = client_string.encode('ascii')
+	encoded = base64.b64encode(client_bytes) 
+	return encoded
 
 class Spotify:
 	def __init__(self, refreshToken, clientId, clientSecret):
@@ -21,7 +27,7 @@ class Spotify:
 			'refresh_token' : self.refreshToken,
 		}
 		headers = {
-			'Authorization': "Basic " + base.encode(self.clientId, self.clientSecret).decode('utf-8') ,
+			'Authorization': "Basic " + encode(self.clientId, self.clientSecret).decode('utf-8') ,
 			'Content-Type': 'application/x-www-form-urlencoded'}
 		res = requests.post(url, data=body, headers=headers)
 		dict = json.loads(res.text)
@@ -43,7 +49,7 @@ class Spotify:
 			}
 		headers = {
 			'content-type': 'application/x-www-form-urlencoded', 
-			'Authorization': "Basic " + base.encode(self.clientId, self.clientSecret).decode('utf-8') 
+			'Authorization': "Basic " + encode(self.clientId, self.clientSecret).decode('utf-8') 
 			}
 		x = requests.post(url, data = form, headers = headers)
 
