@@ -5,7 +5,8 @@ from sklearn.cluster import KMeans
 
 def getImage(url):
     f = requests.get(url, allow_redirects=True)
-    open('cover.png', 'wb').write(f.content)
+    #open('cover.png', 'wb').write(f.content)
+    return f.content
 
 
 def is_grayscale(image):
@@ -29,9 +30,10 @@ def filter_saturation(colors, min_saturation=60, min_brightness=50):
     return filtered_colors
 
 def extract_dominant_colors(url, k=5, min_saturation=60, min_brightness=50):
-    getImage(url)
+    im = getImage(url)
     # Bild laden
-    image = cv2.imread('./cover.png')
+    file_array = np.frombuffer(im, np.uint8)
+    image = cv2.imdecode(file_array, cv2.IMREAD_COLOR)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     
     # Bildgröße anpassen
