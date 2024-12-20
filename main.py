@@ -27,12 +27,12 @@ try:
 			while(song == -1):
 				song = s.getCurrentTrack()
 				sleep(1)
-			currentSong = str(song['item']['id'])
+			currentSong = str(song['id'])
 			sleep(1)
 		print()
 		oldSong = currentSong 
 
-		coverUrl = song['item']['album']['images'][1]['url']
+		coverUrl = song['album']['images'][1]['url']
 		palette = analyzer.extract_dominant_colors(coverUrl, 10, 60, 100)
 
 		lights = ["light.lampe1", "light.lampe2", "light.lampe3", "light.lampe4"]

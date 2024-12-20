@@ -66,6 +66,6 @@ class Spotify:
 		res = requests.get(url, headers=headers)
 		if(res.text):
 			song = json.loads(res.text)
+			if(song['id']): return song['id']
 		else: 
-			song = -1
-		return song
+			return -1
