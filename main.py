@@ -2,16 +2,23 @@ from spotify import Spotify
 import analyzer 
 from time import sleep 
 import wled
-import home
+from home import Home
+from dotenv import load_dotenv
+import os 
 
-clientId = '4e7c4e2792ef4fc0963d4418ead81671' 
-clientSecret = '92547db376f84c0b986ecfdc3812efd7' 
-redirectUri = 'https://google.com/' 
+load_dotenv() 
 
-refreshToken = 'AQC0zl0IfQ4aNWzvym6OUkHGxHjhIpYG2gCjeNtcsgATegYUROREBqNcbVIViKBUBLiTSCho9F99sQzgdGBXrytVUYkS9nVcgOOj2XZkjQ0N8TENLJfddK67GR-S54BaSHg'
-code = 'AQBaVBnNJE5WkWPKj06o0vbCCBmd-73z2adcYLvY0uZgvdnJJ4av6BojPq2fIa7oiQOqkvxFXiLGcp-eDBzrZlTMjUgthbBbgptCLOf8NXoV_9hESPsARdGY7VSUtowKcLKnp67hzgcidsJQKZ2Em__PpHmaAGo' 
+clientId = os.getenv('CLIENT_ID')
+clientSecret = os.getenv('CLIENT_SECRET')
+redirectUri = os.getenv('REDIRECT_URI') 
+refreshToken = os.getenv('REFRESH_TOKEN') 
+code = os.getenv('SPOTIFY_CODE') 
+homeToken = os.getenv('HOME_TOKEN') 
+
 
 s = Spotify(refreshToken, clientId, clientSecret)
+
+home = Home(homeToken, "http://192.168.178.57:8123")
 
 brightness = 1
 
@@ -21,7 +28,7 @@ try:
 
 	while True:
 		while currentSong == oldSong:
-			while(home.checkSpotify() == 0):
+			while(home.checkSwitch("switch.spotify") == 0):
 				sleep(1)
 			song = s.getCurrentTrack()
 			while(song == -1):
@@ -42,7 +49,7 @@ try:
 			g = int(p[1]) 
 			b = int(p[2])
 			#ledControll.changeColor(segment, int(r * brightness), int(g * brightness), int(b * brightness));
-			home.turnon(lights[segment], r, g, b)
+			home.changeColor(lights[segment], r, g, b)
 			segment += 1
 			print('\033[38;2;' + str(r) + ';' + str(g) + ';' + str(b) + 'mColor!\033[0m')
 			if(segment >= 4): break;
