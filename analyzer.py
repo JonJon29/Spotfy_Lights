@@ -1,19 +1,11 @@
-from colorthief import ColorThief
 import requests 
 import cv2
 import numpy as np
 from sklearn.cluster import KMeans
-import matplotlib.pyplot as plt
 
 def getImage(url):
     f = requests.get(url, allow_redirects=True)
     open('cover.png', 'wb').write(f.content)
-
-def getColor(url):
-	getImage(url)
-	color_thief = ColorThief('./cover.png')
-	palette = color_thief.get_palette(color_count=3, quality=1) 
-	return palette
 
 
 def is_grayscale(image):

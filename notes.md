@@ -13,3 +13,13 @@ curl -d "grant_type=authorization_code" -d "code=AQAT6Fy3jCwZ3OjafNWBtqwvK__GsYd
 NGU3YzRlMjc5MmVmNGZjMDk2M2Q0NDE4ZWFkODE2NzE6OTI1NDdkYjM3NmY4NGMwYjk4NmVjZmRjMzgxMmVmZDc= 
 
 192.168.178.166/win&SS=1&R=100&B=255
+
+# Home Assistant Token 
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxMDFjMWQwZjc4MjA0MTU2OWRlODk5OTAyOTM0ZTZlMCIsImlhdCI6MTczNDM3NTI4MCwiZXhwIjoyMDQ5NzM1MjgwfQ.86FhBRhsaeeUf6cu4-hK7Z9NZm9YxWvUGHoFEUH0Wwc
+
+curl -X GET \
+  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxMDFjMWQwZjc4MjA0MTU2OWRlODk5OTAyOTM0ZTZlMCIsImlhdCI6MTczNDM3NTI4MCwiZXhwIjoyMDQ5NzM1MjgwfQ.86FhBRhsaeeUf6cu4-hK7Z9NZm9YxWvUGHoFEUH0Wwc" \
+  -H "Content-Type: application/json" \
+  http://192.168.178.57:8123/api/services
+
+

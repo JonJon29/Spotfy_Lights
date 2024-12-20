@@ -1,6 +1,10 @@
 import requests 
 import base
 import json
+from datetime import datetime, timezone
+
+def getTime(): 
+	return int(datetime.now(timezone.utc).timestamp())
 
 def authorize(client_id, client_secret, redirect_uri, code):
 	url ='https://accounts.spotify.com/api/token'
@@ -31,6 +35,7 @@ def getToken(client_id, client_secret, refresh_token):
 		'Content-Type': 'application/x-www-form-urlencoded'}
 	res = requests.post(url, data=body, headers=headers)
 	dict = json.loads(res.text)
+
 	return dict['access_token']
 
 def getCurrentTrack(token):
@@ -42,5 +47,5 @@ def getCurrentTrack(token):
 	if(res.text):
 		song = json.loads(res.text)
 	else: 
-		song = {}
+		song = -1
 	return song
