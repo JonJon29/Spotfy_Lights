@@ -64,8 +64,9 @@ class Spotify:
 			'Authorization' : 'Bearer ' + str(self.token)
 			}
 		res = requests.get(url, headers=headers)
-		if(res.text):
+		print(len(res.text))
+		if(len(res.text) > 1):
 			song = json.loads(res.text)
-			if(song['id']): return song['id']
+			return song['item']
 		else: 
 			return -1
